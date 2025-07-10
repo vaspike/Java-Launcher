@@ -1153,14 +1153,6 @@ export class I18nService {
             'en': 'Current JMX status',
             'zh-cn': '当前 JMX 状态'
         },
-        'config.enabled': {
-            'en': 'enabled',
-            'zh-cn': '启用'
-        },
-        'config.disabled': {
-            'en': 'disabled',
-            'zh-cn': '禁用'
-        },
         'config.notSet': {
             'en': 'not set',
             'zh-cn': '未设置'

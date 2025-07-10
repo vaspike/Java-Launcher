@@ -2,7 +2,7 @@
   "name": "java-launcher",
   "displayName": "Java Launcher",
   "description": "Auto-generate launch configurations for Java projects",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "River",
   "repository": {
     "type": "git",
