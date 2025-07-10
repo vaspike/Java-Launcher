@@ -4,6 +4,10 @@
   "description": "Auto-generate launch configurations for Java projects",
   "version": "0.0.1",
   "publisher": "River",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaspike/Java-Launcher.git"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
