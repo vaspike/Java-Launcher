@@ -5,6 +5,7 @@ import { AggregatedLaunchManager } from '../services/AggregatedLaunchManager';
 import { JavaEntry, JavaEntryType } from '../models/JavaEntry';
 import { AggregatedLaunchConfig } from '../models/AggregatedLaunchConfig';
 import { RecentLaunchManager, LaunchHistoryItem } from '../services/RecentLaunchManager';
+import { I18nService } from '../services/I18nService';
 
 /**
  * Tree Item 类型枚举
@@ -37,44 +38,45 @@ export class JavaLauncherTreeItem extends vscode.TreeItem {
     }
 
     private setIconAndTooltip(): void {
+        const i18n = I18nService.getInstance();
         switch (this.itemType) {
             case TreeItemType.ROOT_JAVA_ENTRIES:
                 this.iconPath = new vscode.ThemeIcon('symbol-class');
-                this.tooltip = 'Java 入口点';
+                this.tooltip = i18n.localize('tree.javaEntries.tooltip');
                 break;
             case TreeItemType.ROOT_AGGREGATED_CONFIGS:
                 this.iconPath = new vscode.ThemeIcon('layers');
-                this.tooltip = '聚合启动配置';
+                this.tooltip = i18n.localize('tree.aggregatedConfigs.tooltip');
                 break;
             case TreeItemType.SPRING_BOOT_APP:
                 this.iconPath = new vscode.ThemeIcon('symbol-method');
-                this.tooltip = `Spring Boot 应用: ${this.label}`;
+                this.tooltip = i18n.localize('tree.springBootApp.tooltip', this.label);
                 // 移除command，点击名称不触发操作
                 break;
             case TreeItemType.JAVA_APP:
                 this.iconPath = new vscode.ThemeIcon('symbol-function');
-                this.tooltip = `Java 应用: ${this.label}`;
+                this.tooltip = i18n.localize('tree.javaApp.tooltip', this.label);
                 // 移除command，点击名称不触发操作
                 break;
             case TreeItemType.TEST_CLASS:
                 this.iconPath = new vscode.ThemeIcon('beaker');
-                this.tooltip = `测试类: ${this.label}`;
+                this.tooltip = i18n.localize('tree.testClass.tooltip', this.label);
                 // 移除command，点击名称不触发操作
                 break;
             case TreeItemType.TEST_METHOD:
                 this.iconPath = new vscode.ThemeIcon('symbol-misc');
-                this.tooltip = `测试方法: ${this.label}`;
+                this.tooltip = i18n.localize('tree.testMethod.tooltip', this.label);
                 // 移除command，点击名称不触发操作
                 break;
             case TreeItemType.AGGREGATED_CONFIG:
                 this.iconPath = new vscode.ThemeIcon('package');
-                this.tooltip = `聚合启动配置: ${this.label}`;
+                this.tooltip = i18n.localize('tree.aggregatedConfig.tooltip', this.label);
                 // 移除command，点击名称不触发操作
                 break;
             case TreeItemType.AGGREGATED_ITEM:
                 const isEnabled = this.data?.enabled;
                 this.iconPath = new vscode.ThemeIcon(isEnabled ? 'check' : 'x');
-                this.tooltip = `启动项: ${this.label} (${isEnabled ? '启用' : '禁用'})`;
+                this.tooltip = i18n.localize('tree.aggregatedItem.tooltip', this.label, (isEnabled ? i18n.localize('common.enabled') : i18n.localize('common.disabled')));
                 break;
             case TreeItemType.EMPTY_STATE:
                 this.iconPath = new vscode.ThemeIcon('info');
@@ -95,12 +97,14 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
     private aggregatedConfigs: AggregatedLaunchConfig[] = [];
     private launchHistory: LaunchHistoryItem[] = [];
     private searchQuery: string = '';
+    private i18n: I18nService;
 
     constructor(
         private projectScanner: ProjectScanner,
         private aggregatedLaunchManager: AggregatedLaunchManager,
         private recentLaunchManager: RecentLaunchManager = new RecentLaunchManager()
     ) {
+        this.i18n = I18nService.getInstance();
         this.loadLaunchHistory();
     }
     
@@ -111,7 +115,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
         try {
             this.launchHistory = await this.recentLaunchManager.loadHistory();
         } catch (error) {
-            console.error('加载启动历史记录失败:', error);
+            console.error(this.i18n.localize('recent.historyLoaded'), error);
             this.launchHistory = [];
         }
     }
@@ -190,12 +194,12 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
     private getRootItems(): JavaLauncherTreeItem[] {
         return [
             new JavaLauncherTreeItem(
-                'Java 入口点',
+                this.i18n.localize('tree.javaEntries.label'),
                 vscode.TreeItemCollapsibleState.Expanded,
                 TreeItemType.ROOT_JAVA_ENTRIES
             ),
             new JavaLauncherTreeItem(
-                '聚合启动配置',
+                this.i18n.localize('tree.aggregatedConfigs.label'),
                 vscode.TreeItemCollapsibleState.Expanded,
                 TreeItemType.ROOT_AGGREGATED_CONFIGS
             )
@@ -245,7 +249,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
                 
                 if (items.length === 0) {
                     items.push(new JavaLauncherTreeItem(
-                        `未找到匹配 "${this.searchQuery}" 的Java入口点`,
+                        this.i18n.localize('tree.noMatchingJavaEntries', this.searchQuery),
                         vscode.TreeItemCollapsibleState.None,
                         TreeItemType.EMPTY_STATE
                     ));
@@ -276,9 +280,9 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
 
             return items;
         } catch (error) {
-            console.error('获取Java入口点失败:', error);
+            console.error(this.i18n.localize('scan.projectFailed', error));
             return [new JavaLauncherTreeItem(
-                '加载失败，请重试',
+                this.i18n.localize('tree.loadFailed'),
                 vscode.TreeItemCollapsibleState.None,
                 TreeItemType.EMPTY_STATE
             )];
@@ -310,8 +314,8 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
 
             if (items.length === 0) {
                 const message = this.searchQuery 
-                    ? `未找到匹配 "${this.searchQuery}" 的聚合启动配置`
-                    : '暂无聚合启动配置';
+                    ? this.i18n.localize('tree.noMatchingAggregatedConfigs', this.searchQuery)
+                    : this.i18n.localize('tree.noAggregatedConfigs');
                 
                 items.push(new JavaLauncherTreeItem(
                     message,
@@ -322,9 +326,9 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
 
             return items;
         } catch (error) {
-            console.error('获取聚合启动配置失败:', error);
+            console.error(this.i18n.localize('aggregated.loadFailed', error));
             return [new JavaLauncherTreeItem(
-                '加载失败，请重试',
+                this.i18n.localize('tree.loadFailed'),
                 vscode.TreeItemCollapsibleState.None,
                 TreeItemType.EMPTY_STATE
             )];
@@ -337,7 +341,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
     private getAggregatedConfigChildren(config: AggregatedLaunchConfig): JavaLauncherTreeItem[] {
         if (!config.items || config.items.length === 0) {
             return [new JavaLauncherTreeItem(
-                '暂无启动项',
+                this.i18n.localize('tree.noLaunchItems'),
                 vscode.TreeItemCollapsibleState.None,
                 TreeItemType.EMPTY_STATE
             )];
@@ -350,7 +354,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
 
         if (itemsToShow.length === 0) {
             return [new JavaLauncherTreeItem(
-                `未找到匹配 "${this.searchQuery}" 的启动项`,
+                this.i18n.localize('tree.noMatchingLaunchItems', this.searchQuery),
                 vscode.TreeItemCollapsibleState.None,
                 TreeItemType.EMPTY_STATE
             )];
@@ -358,7 +362,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
 
         return itemsToShow.map(item => {
             const label = item.delay && item.delay > 0 
-                ? `${item.name} (延迟: ${item.delay}ms)`
+                ? this.i18n.localize('tree.itemWithDelay', item.name, item.delay)
                 : item.name;
                 
             return new JavaLauncherTreeItem(
@@ -384,7 +388,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
             const projectInfo = await this.projectScanner.scanProject(workspaceFolder.uri.fsPath);
             this.javaEntries = projectInfo.getAllJavaEntries();
         } catch (error) {
-            console.error('扫描Java入口点失败:', error);
+            console.error(this.i18n.localize('scan.projectFailed', error));
             this.javaEntries = [];
         }
     }
@@ -396,7 +400,7 @@ export class JavaLauncherTreeDataProvider implements vscode.TreeDataProvider<Jav
         try {
             this.aggregatedConfigs = await this.aggregatedLaunchManager.loadConfigs();
         } catch (error) {
-            console.error('加载聚合启动配置失败:', error);
+            console.error(this.i18n.localize('aggregated.loadFailed', error));
             this.aggregatedConfigs = [];
         }
     }

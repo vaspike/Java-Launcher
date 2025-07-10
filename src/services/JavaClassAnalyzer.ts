@@ -2,15 +2,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { JavaEntry, JavaEntryType } from '../models/JavaEntry';
 import { FileSystemManager } from './FileSystemManager';
+import { I18nService } from './I18nService';
 
 /**
  * Java 类分析器
  */
 export class JavaClassAnalyzer {
     private fileSystemManager: FileSystemManager;
+    private i18n: I18nService;
 
     constructor() {
         this.fileSystemManager = new FileSystemManager();
+        this.i18n = I18nService.getInstance();
     }
 
     /**
@@ -90,7 +93,7 @@ export class JavaClassAnalyzer {
                     `🍃 ${className.split('.').pop()}`,
                     annotationLineIndex + 1,
                     undefined,
-                    `Spring Boot Application Entry Point`,
+                    this.i18n.localize('entry.springBoot.description'),
                     annotations
                 );
 
@@ -129,7 +132,7 @@ export class JavaClassAnalyzer {
                     `☕ ${className.split('.').pop()}`,
                     mainMethodLineIndex + 1,
                     'main',
-                    `Java Application Entry Point`
+                    this.i18n.localize('entry.javaApp.description')
                 );
 
                 entries.push(entry);
@@ -212,16 +215,16 @@ export class JavaClassAnalyzer {
 
         if (isJUnit4) {
             entryType = JavaEntryType.JUNIT_TEST_CLASS;
-            framework = 'JUnit 4';
+            framework = this.i18n.localize('entry.framework.junit4');
         } else if (isJUnit5) {
             entryType = JavaEntryType.JUNIT_TEST_CLASS;
-            framework = 'JUnit 5';
+            framework = this.i18n.localize('entry.framework.junit5');
         } else if (isTestNG) {
             entryType = JavaEntryType.TESTNG_TEST_CLASS;
-            framework = 'TestNG';
+            framework = this.i18n.localize('entry.framework.testng');
         } else {
             entryType = JavaEntryType.JUNIT_TEST_CLASS;
-            framework = 'JUnit';
+            framework = this.i18n.localize('entry.framework.junit');
         }
 
         // 找到类声明的行号
@@ -239,7 +242,7 @@ export class JavaClassAnalyzer {
                 `🧪 ${className.split('.').pop()}`,
                 classDeclarationIndex + 1,
                 undefined,
-                `${framework} Test Class`,
+                this.i18n.localize('entry.testClass.description', framework),
                 annotations
             );
         }
@@ -282,16 +285,16 @@ export class JavaClassAnalyzer {
 
                 if (isJUnit4) {
                     entryType = JavaEntryType.JUNIT_TEST_METHOD;
-                    framework = 'JUnit 4';
+                    framework = this.i18n.localize('entry.framework.junit4');
                 } else if (isJUnit5) {
                     entryType = JavaEntryType.JUNIT_TEST_METHOD;
-                    framework = 'JUnit 5';
+                    framework = this.i18n.localize('entry.framework.junit5');
                 } else if (isTestNG) {
                     entryType = JavaEntryType.TESTNG_TEST_METHOD;
-                    framework = 'TestNG';
+                    framework = this.i18n.localize('entry.framework.testng');
                 } else {
                     entryType = JavaEntryType.JUNIT_TEST_METHOD;
-                    framework = 'JUnit';
+                    framework = this.i18n.localize('entry.framework.junit');
                 }
 
                 const annotations = new Map<string, any>();
@@ -308,7 +311,7 @@ export class JavaClassAnalyzer {
                     `🔬 ${simpleClassName}-${methodName}`,
                     methodLineIndex + 1,
                     methodName,
-                    `${framework} Test Method`,
+                    this.i18n.localize('entry.testMethod.description', framework),
                     annotations
                 );
 

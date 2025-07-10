@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { JavaEntry } from '../models/JavaEntry';
 import { FileSystemManager } from './FileSystemManager';
+import { I18nService } from './I18nService';
 
 /**
  * 最近启动记录项
@@ -21,10 +22,12 @@ export class RecentLaunchManager {
     private fileSystemManager: FileSystemManager;
     private historyFilePath: string;
     private launchHistory: LaunchHistoryItem[] = [];
+    private i18n: I18nService;
 
     constructor() {
         this.fileSystemManager = new FileSystemManager();
         this.historyFilePath = this.getHistoryFilePath();
+        this.i18n = I18nService.getInstance();
     }
 
     /**
@@ -33,7 +36,7 @@ export class RecentLaunchManager {
     private getHistoryFilePath(): string {
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
-            throw new Error('未找到工作区');
+            throw new Error(this.i18n.localize('workspace.notFound'));
         }
         
         const vscodeDir = path.join(workspaceFolder.uri.fsPath, '.vscode');
@@ -52,9 +55,10 @@ export class RecentLaunchManager {
                 this.launchHistory = jsonData.history || [];
             }
             
+            console.log(this.i18n.localize('recent.historyLoaded'));
             return this.launchHistory;
         } catch (error) {
-            console.error('加载启动历史记录失败:', error);
+            console.error(this.i18n.localize('recent.loadHistoryFailed', error));
             this.launchHistory = [];
             return this.launchHistory;
         }
@@ -81,9 +85,9 @@ export class RecentLaunchManager {
                 JSON.stringify(historyData, null, 2)
             );
             
-            console.log('启动历史记录已保存');
+            console.log(this.i18n.localize('recent.historySaved'));
         } catch (error) {
-            console.error('保存启动历史记录失败:', error);
+            console.error(this.i18n.localize('recent.saveHistoryFailed', error));
         }
     }
 
@@ -151,7 +155,7 @@ export class RecentLaunchManager {
         try {
             const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
             if (!workspaceFolder) {
-                throw new Error('未找到工作区文件夹');
+                throw new Error(this.i18n.localize('workspace.folderNotFound'));
             }
             
             const launchJsonPath = path.join(workspaceFolder.uri.fsPath, '.vscode', 'launch.json');
@@ -195,9 +199,9 @@ export class RecentLaunchManager {
                 JSON.stringify(launchJson, null, 4)
             );
             
-            console.log('已更新launch.json配置顺序');
+            console.log(this.i18n.localize('recent.launchJsonOrderUpdated'));
         } catch (error) {
-            console.error('更新launch.json配置顺序失败:', error);
+            console.error(this.i18n.localize('recent.updateLaunchJsonOrderFailed', error));
         }
     }
 } 

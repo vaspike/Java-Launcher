@@ -221,7 +221,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 
                 if (!javaEntry || !javaEntry.className) {
-                    vscode.window.showErrorMessage('Java入口点无效，请重新选择');
+                    vscode.window.showErrorMessage(i18n.localize('entry.invalid'));
                     return;
                 }
                 await runJavaEntryFromTree(javaEntry, launchConfigGenerator, projectScanner);
@@ -251,7 +251,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 
                 if (!config || !config.name) {
-                    vscode.window.showErrorMessage('聚合启动配置无效，请重新选择');
+                    vscode.window.showErrorMessage(i18n.localize('aggregated.invalidConfig'));
                     return;
                 }
                 await aggregatedLaunchManager.executeAggregatedLaunch(config.name);
@@ -291,7 +291,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 
                 if (!javaEntry || !javaEntry.className) {
-                    vscode.window.showErrorMessage('Java入口点无效，请重新选择');
+                    vscode.window.showErrorMessage(i18n.localize('entry.invalid'));
                     return;
                 }
                 await addJavaEntryToAggregatedConfig(javaEntry, aggregatedLaunchManager, treeDataProvider);
@@ -322,13 +322,12 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(treeView);
 
     // 初始化国际化服务
-    const i18n = I18nService.getInstance();
-    console.log("当前语言：", i18n.getLocale());
+    console.log(i18n.localize('extension.currentLanguage', i18n.getLocale()));
 
     // 创建状态栏项
     const javaLauncherStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
     javaLauncherStatusBarItem.text = '$(debug) Java Launcher';
-    javaLauncherStatusBarItem.tooltip = 'Java Launcher';
+    javaLauncherStatusBarItem.tooltip = i18n.localize('statusbar.tooltip');
     javaLauncherStatusBarItem.command = 'java-launcher.showAllCommands';
     javaLauncherStatusBarItem.show();
     context.subscriptions.push(javaLauncherStatusBarItem);
@@ -339,7 +338,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 监听工作区变化
     const workspaceWatcher = vscode.workspace.onDidChangeWorkspaceFolders(() => {
-        console.log('工作区文件夹已更改');
+        console.log(i18n.localize('watcher.workspaceChanged'));
         treeDataProvider.reloadData();
     });
 
@@ -349,19 +348,19 @@ export function activate(context: vscode.ExtensionContext) {
     const javaFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.java');
     
     javaFileWatcher.onDidCreate(() => {
-        console.log('Java 文件已创建');
+        console.log(i18n.localize('watcher.javaFileCreated'));
         // 延迟刷新，避免频繁更新
         setTimeout(() => treeDataProvider.refresh(), 1000);
     });
 
     javaFileWatcher.onDidDelete(() => {
-        console.log('Java 文件已删除');
+        console.log(i18n.localize('watcher.javaFileDeleted'));
         // 延迟刷新，避免频繁更新
         setTimeout(() => treeDataProvider.refresh(), 1000);
     });
 
     javaFileWatcher.onDidChange(() => {
-        console.log('Java 文件已修改');
+        console.log(i18n.localize('watcher.javaFileChanged'));
         // 延迟刷新，避免频繁更新
         setTimeout(() => treeDataProvider.refresh(), 2000);
     });
@@ -372,17 +371,17 @@ export function activate(context: vscode.ExtensionContext) {
     const aggregatedConfigWatcher = vscode.workspace.createFileSystemWatcher('**/.vscode/aggregated-launch.json');
     
     aggregatedConfigWatcher.onDidCreate(() => {
-        console.log('聚合启动配置文件已创建');
+        console.log(i18n.localize('watcher.aggConfigFileCreated'));
         treeDataProvider.refresh();
     });
 
     aggregatedConfigWatcher.onDidChange(() => {
-        console.log('聚合启动配置文件已修改');
+        console.log(i18n.localize('watcher.aggConfigFileChanged'));
         treeDataProvider.refresh();
     });
 
     aggregatedConfigWatcher.onDidDelete(() => {
-        console.log('聚合启动配置文件已删除');
+        console.log(i18n.localize('watcher.aggConfigFileDeleted'));
         treeDataProvider.refresh();
     });
 
@@ -1659,8 +1658,8 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
     await aggregatedLaunchManager.loadConfigs();
     // 创建QuickPick
     const quickPick = vscode.window.createQuickPick();
-    quickPick.placeholder = i18n.localize('search.inputSearchQuery');
-    quickPick.title = i18n.localize('search.searchAndRunJavaEntryOrConfig');
+    quickPick.placeholder = i18n.localize('config.inputSearchQuery');
+    quickPick.title = i18n.localize('config.searchAndRunJavaEntryOrConfig');
     
     // 设置初始项
     const allEntries = treeDataProvider.getJavaEntries();
@@ -1704,8 +1703,8 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
                 }
                 
                 const projectLabel = i18n.getLocale() === 'zh-cn' ? 
-                    `${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('config.unknown')}` : 
-                    `${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('config.unknown')}`;
+                    `${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('common.unknown')}` : 
+                    `${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('common.unknown')}`;
                 
                 return {
                     label: `$(${iconName}) ${entry.displayName}`,
@@ -1933,5 +1932,6 @@ function formatRunningTime(startTime: Date): string {
 }
 
 export function deactivate() {
-    console.log('Java Launcher 插件已停用');
+    const i18n = I18nService.getInstance();
+    console.log(i18n.localize('plugin.deactivated'));
 }

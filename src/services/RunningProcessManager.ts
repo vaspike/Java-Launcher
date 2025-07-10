@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { JavaEntry } from '../models/JavaEntry';
+import { I18nService } from './I18nService';
 
 /**
  * 运行中的Java进程信息
@@ -21,9 +22,11 @@ export class RunningProcessManager {
     private runningProcesses: Map<string, RunningJavaProcess> = new Map();
     private _onDidChangeProcesses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     public readonly onDidChangeProcesses: vscode.Event<void> = this._onDidChangeProcesses.event;
+    private i18n: I18nService;
 
     // 私有构造函数，使用单例模式
     private constructor() {
+        this.i18n = I18nService.getInstance();
         // 监听调试会话开始事件
         vscode.debug.onDidStartDebugSession(session => {
             // 仅处理Java类型的调试会话
@@ -149,7 +152,7 @@ export class RunningProcessManager {
             // 获取当前进程的配置信息
             const config = process.debugSession.configuration;
             if (!config) {
-                console.error('无法获取进程配置信息');
+                console.error(this.i18n.localize('process.cannotGetConfig'));
                 return false;
             }
             
@@ -164,7 +167,7 @@ export class RunningProcessManager {
             await vscode.debug.startDebugging(folder, config);
             return true;
         } catch (error) {
-            console.error('重启进程失败:', error);
+            console.error(this.i18n.localize('process.restartFailed.single', process.name), error);
             return false;
         }
     }
@@ -184,7 +187,7 @@ export class RunningProcessManager {
             const validProcesses = processConfigs.filter(p => p.config);
             
             if (validProcesses.length === 0) {
-                console.error('没有找到有效的进程配置');
+                console.error(this.i18n.localize('process.noValidConfigs'));
                 return false;
             }
             
@@ -200,12 +203,12 @@ export class RunningProcessManager {
                 try {
                     await vscode.debug.startDebugging(folder, proc.config);
                 } catch (err) {
-                    console.error(`重启进程 ${proc.name} 失败:`, err);
+                    console.error(this.i18n.localize('process.restartFailedSingle', proc.name, err));
                 }
             }
             return true;
         } catch (error) {
-            console.error('重启所有进程失败:', error);
+            console.error(this.i18n.localize('process.restartAllFailed', error));
             return false;
         }
     }

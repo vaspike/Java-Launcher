@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { promisify } from 'util';
+import { I18nService } from './I18nService';
 
 // 将 fs 方法转换为 Promise
 const readFile = promisify(fs.readFile);
@@ -14,6 +15,12 @@ const readdir = promisify(fs.readdir);
  * 文件系统管理器
  */
 export class FileSystemManager {
+    private i18n: I18nService;
+
+    constructor() {
+        this.i18n = I18nService.getInstance();
+    }
+
     /**
      * 检查文件或目录是否存在
      */
@@ -34,7 +41,7 @@ export class FileSystemManager {
             const content = await readFile(filePath, 'utf-8');
             return content;
         } catch (error) {
-            throw new Error(`读取文件失败: ${filePath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.readFileFailed', filePath, error));
         }
     }
 
@@ -48,7 +55,7 @@ export class FileSystemManager {
             
             await writeFile(filePath, content, 'utf-8');
         } catch (error) {
-            throw new Error(`写入文件失败: ${filePath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.writeFileFailed', filePath, error));
         }
     }
 
@@ -62,7 +69,7 @@ export class FileSystemManager {
                 await mkdir(dirPath, { recursive: true });
             }
         } catch (error) {
-            throw new Error(`创建目录失败: ${dirPath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.createDirFailed', dirPath, error));
         }
     }
 
@@ -73,7 +80,7 @@ export class FileSystemManager {
         try {
             return await stat(filePath);
         } catch (error) {
-            throw new Error(`获取文件信息失败: ${filePath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.getStatsFailed', filePath, error));
         }
     }
 
@@ -108,7 +115,7 @@ export class FileSystemManager {
         try {
             return await readdir(dirPath);
         } catch (error) {
-            throw new Error(`读取目录失败: ${dirPath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.readDirFailed', dirPath, error));
         }
     }
 
@@ -120,7 +127,7 @@ export class FileSystemManager {
             const content = await this.readFile(filePath);
             return JSON.parse(content);
         } catch (error) {
-            throw new Error(`读取 JSON 文件失败: ${filePath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.readJsonFailed', filePath, error));
         }
     }
 
@@ -132,7 +139,7 @@ export class FileSystemManager {
             const content = JSON.stringify(data, null, 2);
             await this.writeFile(filePath, content);
         } catch (error) {
-            throw new Error(`写入 JSON 文件失败: ${filePath}, 错误: ${error}`);
+            throw new Error(this.i18n.localize('fs.writeJsonFailed', filePath, error));
         }
     }
 

@@ -3,15 +3,18 @@ import { ProjectInfo } from '../models/ProjectInfo';
 import { JavaEntry, JavaEntryType } from '../models/JavaEntry';
 import { LaunchConfig } from '../models/LaunchConfig';
 import { FileSystemManager } from './FileSystemManager';
+import { I18nService } from './I18nService';
 
 /**
  * 启动配置生成器
  */
 export class LaunchConfigGenerator {
     private fileSystemManager: FileSystemManager;
+    private i18n: I18nService;
 
     constructor() {
         this.fileSystemManager = new FileSystemManager();
+        this.i18n = I18nService.getInstance();
     }
 
     /**
@@ -19,12 +22,12 @@ export class LaunchConfigGenerator {
      */
     async generateConfigs(projectInfo: ProjectInfo, workspaceRoot: string): Promise<void> {
         try {
-            console.log('开始生成启动配置...');
+            console.log(this.i18n.localize('generator.generatingConfig'));
 
             // 1. 获取所有 Java 入口点
             const javaEntries = projectInfo.getAllJavaEntries();
             if (javaEntries.length === 0) {
-                console.log('没有找到 Java 入口点，跳过配置生成');
+                console.log(this.i18n.localize('generator.noEntriesFound'));
                 return;
             }
 
@@ -41,10 +44,10 @@ export class LaunchConfigGenerator {
             // 5. 写入 launch.json 文件
             await this.writeLaunchJson(launchJsonPath, mergedConfig);
 
-            console.log(`成功生成 ${launchConfigs.length} 个启动配置`);
+            console.log(this.i18n.localize('generator.success', launchConfigs.length));
 
         } catch (error) {
-            console.error('生成启动配置失败:', error);
+            console.error(this.i18n.localize('config.generateFailed', error));
             throw error;
         }
     }
@@ -62,7 +65,7 @@ export class LaunchConfigGenerator {
                     launchConfigs.push(config);
                 }
             } catch (error) {
-                console.warn(`创建启动配置失败: ${entry.className}, 错误: ${error}`);
+                console.warn(this.i18n.localize('generator.createConfigFailed', entry.className, error));
             }
         }
 
@@ -89,7 +92,7 @@ export class LaunchConfigGenerator {
                 return this.createTestMethodConfig(entry, projectInfo);
             
             default:
-                console.warn(`不支持的入口点类型: ${entry.type}`);
+                console.warn(this.i18n.localize('generator.unsupportedType', entry.type));
                 return null;
         }
     }
@@ -168,7 +171,7 @@ export class LaunchConfigGenerator {
                 return config;
             }
         } catch (error) {
-            console.warn(`读取现有 launch.json 文件失败: ${error}`);
+            console.warn(this.i18n.localize('generator.readExistingLaunchJsonFailed', error));
         }
 
         // 返回默认配置结构
@@ -199,11 +202,11 @@ export class LaunchConfigGenerator {
             if (existingIndex !== -1) {
                 // 更新现有配置
                 mergedConfig.configurations[existingIndex] = newConfig;
-                console.log(`更新现有配置: ${newConfig.name}`);
+                console.log(this.i18n.localize('generator.updateConfig', newConfig.name));
             } else {
                 // 添加新配置
                 mergedConfig.configurations.push(newConfig);
-                console.log(`添加新配置: ${newConfig.name}`);
+                console.log(this.i18n.localize('generator.addConfig', newConfig.name));
             }
         }
 
@@ -216,9 +219,9 @@ export class LaunchConfigGenerator {
     private async writeLaunchJson(launchJsonPath: string, config: any): Promise<void> {
         try {
             await this.fileSystemManager.writeJsonFile(launchJsonPath, config);
-            console.log(`成功写入 launch.json 文件: ${launchJsonPath}`);
+            console.log(this.i18n.localize('generator.writeLaunchJsonSuccess', launchJsonPath));
         } catch (error) {
-            throw new Error(`写入 launch.json 文件失败: ${error}`);
+            throw new Error(this.i18n.localize('generator.writeLaunchJsonFailed', error));
         }
     }
 
@@ -254,7 +257,7 @@ export class LaunchConfigGenerator {
 
             return JSON.stringify(previewConfig, null, 2);
         } catch (error) {
-            throw new Error(`生成配置预览失败: ${error}`);
+            throw new Error(this.i18n.localize('config.previewFailed', error));
         }
     }
 
@@ -277,7 +280,7 @@ export class LaunchConfigGenerator {
             // 简单检查：如果配置数量不匹配，则需要更新
             return expectedConfigCount !== actualConfigCount;
         } catch (error) {
-            console.warn(`检查配置更新状态失败: ${error}`);
+            console.warn(this.i18n.localize('generator.checkUpdateFailed', error));
             return true;
         }
     }

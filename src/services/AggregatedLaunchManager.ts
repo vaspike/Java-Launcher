@@ -25,7 +25,7 @@ export class AggregatedLaunchManager {
     private getConfigFilePath(): string {
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
-            throw new Error('未找到工作区');
+            throw new Error(this.i18n.localize('workspace.notFound'));
         }
         
         const vscodeDir = path.join(workspaceFolder.uri.fsPath, '.vscode');
@@ -50,7 +50,7 @@ export class AggregatedLaunchManager {
             
             return this.aggregatedConfigs;
         } catch (error) {
-            console.error('加载聚合启动配置失败:', error);
+            console.error(this.i18n.localize('aggregated.loadFailed', error));
             this.aggregatedConfigs = [];
             return this.aggregatedConfigs;
         }
@@ -77,10 +77,10 @@ export class AggregatedLaunchManager {
                 JSON.stringify(configData, null, 2)
             );
             
-            console.log('聚合启动配置已保存');
+            console.log(this.i18n.localize('aggregated.saveSuccess'));
         } catch (error) {
-            console.error('保存聚合启动配置失败:', error);
-            throw new Error(`保存聚合启动配置失败: ${error}`);
+            console.error(this.i18n.localize('aggregated.saveFailed', error));
+            throw new Error(this.i18n.localize('aggregated.saveFailed', error));
         }
     }
 
@@ -108,7 +108,7 @@ export class AggregatedLaunchManager {
     ): Promise<AggregatedLaunchConfig> {
         // 检查名称是否已存在
         if (this.getConfigByName(name)) {
-            throw new Error(`聚合启动配置 "${name}" 已存在`);
+            throw new Error(this.i18n.localize('aggregated.nameExists', name));
         }
 
         const config = new AggregatedLaunchConfig(name, description, items);
@@ -130,7 +130,7 @@ export class AggregatedLaunchManager {
     ): Promise<AggregatedLaunchConfig> {
         const index = this.aggregatedConfigs.findIndex(config => config.name === name);
         if (index === -1) {
-            throw new Error(`未找到聚合启动配置 "${name}"`);
+            throw new Error(this.i18n.localize('aggregated.notFound', name));
         }
 
         const oldConfig = this.aggregatedConfigs[index];
@@ -154,7 +154,7 @@ export class AggregatedLaunchManager {
     public async deleteConfig(name: string): Promise<void> {
         const index = this.aggregatedConfigs.findIndex(config => config.name === name);
         if (index === -1) {
-            throw new Error(`未找到聚合启动配置 "${name}"`);
+            throw new Error(this.i18n.localize('aggregated.notFound', name));
         }
 
         this.aggregatedConfigs.splice(index, 1);
@@ -239,16 +239,16 @@ export class AggregatedLaunchManager {
             // 获取工作区文件夹
             const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
             if (!workspaceFolder) {
-                throw new Error('未找到工作区文件夹');
+                throw new Error(this.i18n.localize('workspace.folderNotFound'));
             }
             
             // 使用VS Code的调试API启动配置，传入正确的工作区文件夹
             const success = await vscode.debug.startDebugging(workspaceFolder, configName);
             if (!success) {
-                throw new Error(`未找到启动配置 "${configName}" 或启动失败`);
+                throw new Error(this.i18n.localize('config.launchNotFoundOrFailed', configName));
             }
         } catch (error) {
-            throw new Error(`执行启动配置失败: ${error}`);
+            throw new Error(this.i18n.localize('config.executeLaunchFailed', error));
         }
     }
 
@@ -288,7 +288,7 @@ export class AggregatedLaunchManager {
             }
         } catch (error) {
             console.error('读取launch.json失败:', error);
-            vscode.window.showErrorMessage(`读取启动配置失败: ${error}`);
+            vscode.window.showErrorMessage(this.i18n.localize('config.readLaunchJsonFailed', error));
         }
 
         return [];
@@ -311,7 +311,7 @@ export class AggregatedLaunchManager {
     public async getLaunchJsonContent(): Promise<any> {
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
-            throw new Error('未找到工作区文件夹');
+            throw new Error(this.i18n.localize('workspace.folderNotFound'));
         }
 
         const launchJsonPath = path.join(workspaceFolder.uri.fsPath, '.vscode', 'launch.json');
@@ -320,7 +320,7 @@ export class AggregatedLaunchManager {
             const content = await this.fileSystemManager.readFile(launchJsonPath);
             return JSON.parse(content);
         } else {
-            throw new Error(`launch.json文件不存在: ${launchJsonPath}`);
+            throw new Error(this.i18n.localize('config.launchJsonNotFoundPath', launchJsonPath));
         }
     }
 } 

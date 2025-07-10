@@ -6,6 +6,7 @@ import { ProjectInfo, ProjectType, BuildInfo } from '../models/ProjectInfo';
 import { JavaEntry } from '../models/JavaEntry';
 import { JavaClassAnalyzer } from './JavaClassAnalyzer';
 import { FileSystemManager } from './FileSystemManager';
+import { I18nService } from './I18nService';
 
 /**
  * 项目扫描服务
@@ -13,10 +14,12 @@ import { FileSystemManager } from './FileSystemManager';
 export class ProjectScanner {
     private javaClassAnalyzer: JavaClassAnalyzer;
     private fileSystemManager: FileSystemManager;
+    private i18n: I18nService;
 
     constructor() {
         this.javaClassAnalyzer = new JavaClassAnalyzer();
         this.fileSystemManager = new FileSystemManager();
+        this.i18n = I18nService.getInstance();
     }
 
     /**
@@ -65,7 +68,7 @@ export class ProjectScanner {
 
         } catch (error) {
             console.error(`扫描项目失败: ${error}`);
-            throw new Error(`扫描项目失败: ${error}`);
+            throw new Error(this.i18n.localize('scan.projectFailed', error));
         }
     }
 
@@ -105,7 +108,7 @@ export class ProjectScanner {
             case ProjectType.PLAIN_JAVA:
                 return this.getPlainJavaBuildInfo(rootPath);
             default:
-                throw new Error(`不支持的项目类型: ${projectType}`);
+                throw new Error(this.i18n.localize('scan.unsupportedProjectType', projectType));
         }
     }
 
