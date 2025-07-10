@@ -2,15 +2,16 @@
   "name": "java-launcher",
   "displayName": "Java Launcher",
   "description": "Auto-generate launch configurations for Java projects",
-  "version": "0.0.1",
+  "version": "1.2.0",
   "publisher": "River",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaspike/Java-Launcher.git"
   },
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.84.0"
   },
+  "icon": "images/logo.png",
   "categories": [
     "Debuggers",
     "Other"
