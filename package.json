@@ -1,0 +1,371 @@
+{
+  "name": "java-launcher",
+  "displayName": "Java Launcher",
+  "description": "Auto-generate launch configurations for Java projects",
+  "version": "0.0.1",
+  "publisher": "River",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "java",
+    "launch",
+    "debug",
+    "configuration",
+    "spring boot",
+    "junit",
+    "testing"
+  ],
+  "activationEvents": [
+    "onLanguage:java",
+    "workspaceContains:**/*.java",
+    "onCommand:java-launcher.generateLaunchConfigs"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "java-launcher.generateLaunchConfigs",
+        "title": "Generate Launch Configurations",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.scanJavaEntries",
+        "title": "Scan Java Entry Points",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.createAggregatedLaunch",
+        "title": "Create Aggregated Launch Configuration",
+        "icon": "$(plus)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.manageAggregatedLaunch",
+        "title": "Manage Aggregated Launch Configurations",
+        "icon": "$(settings-gear)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.executeAggregatedLaunch",
+        "title": "Execute Aggregated Launch Configuration",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.debugAggregatedLaunch",
+        "title": "Debug Aggregated Launch Configuration",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.runJavaEntry",
+        "title": "Run Java Entry",
+        "icon": "$(play)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.runAggregatedConfig",
+        "title": "Run Aggregated Configuration",
+        "icon": "$(play)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.refreshTreeView",
+        "title": "Refresh",
+        "icon": "$(refresh)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.addToAggregatedConfig",
+        "title": "Add to Aggregated Configuration",
+        "icon": "$(plus)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.showAllCommands",
+        "title": "Show All Commands",
+        "icon": "$(list-unordered)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.setSpringProfile",
+        "title": "Set Spring Active Profile",
+        "icon": "$(settings)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.setAllSpringProfiles",
+        "title": "Set All Spring Boot Profiles",
+        "icon": "$(settings)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.setAllJmxRemoteStatus",
+        "title": "Set All JMX Remote Management Status",
+        "icon": "$(remote-explorer)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.searchAndRun",
+        "title": "Search and Run Java Entry",
+        "icon": "$(search)",
+        "category": "Java Launcher"
+      },
+      {
+        "command": "java-launcher.refresh",
+        "title": "Refresh Java Launcher",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "java-launcher.run",
+        "title": "Run Java Entry",
+        "icon": "$(play)"
+      },
+      {
+        "command": "java-launcher.debug",
+        "title": "Debug Java Entry",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "java-launcher.addToAggregated",
+        "title": "Add to Aggregated Launch",
+        "icon": "$(add)"
+      },
+      {
+        "command": "java-launcher.runAggregated",
+        "title": "Run Aggregated Launch",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "java-launcher.editAggregated",
+        "title": "Edit Aggregated Launch",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "java-launcher.removeFromAggregated",
+        "title": "Remove from Aggregated Launch",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "java-launcher.deleteAggregated",
+        "title": "Delete Aggregated Launch",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "java-launcher.setJmxRemoteEnabled",
+        "title": "Enable JMX Remote",
+        "icon": "$(check)"
+      },
+      {
+        "command": "java-launcher.setJmxRemoteDisabled",
+        "title": "Disable JMX Remote",
+        "icon": "$(close)"
+      },
+      {
+        "command": "java-launcher.setAllJmxRemoteEnabled",
+        "title": "Enable All JMX Remote",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "java-launcher.setAllJmxRemoteDisabled",
+        "title": "Disable All JMX Remote",
+        "icon": "$(close-all)"
+      },
+      {
+        "command": "java-launcher.manageRunningProcesses",
+        "title": "Manage Running Java Processes",
+        "icon": "$(window)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "javaLauncherView",
+          "name": "Java Launcher",
+          "when": "workspaceFolderCount > 0"
+        }
+      ]
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .java",
+          "command": "java-launcher.generateLaunchConfigs",
+          "group": "1_modification"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "java-launcher.generateLaunchConfigs",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.scanJavaEntries",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.createAggregatedLaunch",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.manageAggregatedLaunch",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.executeAggregatedLaunch",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.debugAggregatedLaunch",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.showAllCommands",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.setSpringProfile",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.setAllSpringProfiles",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.setAllJmxRemoteStatus",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.searchAndRun",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.manageRunningProcesses",
+          "when": "workspaceFolderCount > 0"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "java-launcher.searchAndRun",
+          "when": "view == javaLauncherView",
+          "group": "navigation"
+        },
+        {
+          "command": "java-launcher.manageRunningProcesses",
+          "when": "view == javaLauncherView",
+          "group": "navigation"
+        },
+        {
+          "command": "java-launcher.showAllCommands",
+          "when": "view == javaLauncherView",
+          "group": "navigation"
+        },
+        {
+          "command": "java-launcher.refreshTreeView",
+          "when": "view == javaLauncherView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "java-launcher.runJavaEntry",
+          "when": "view == javaLauncherView && viewItem == springBootApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == springBootApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.setSpringProfile",
+          "when": "view == javaLauncherView && viewItem == springBootApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.runJavaEntry",
+          "when": "view == javaLauncherView && viewItem == javaApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == javaApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.runJavaEntry",
+          "when": "view == javaLauncherView && viewItem == testClass",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == testClass",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.runJavaEntry",
+          "when": "view == javaLauncherView && viewItem == testMethod",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == testMethod",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.runAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == aggregatedConfig",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.manageAggregatedLaunch",
+          "when": "view == javaLauncherView && viewItem == aggregatedConfigs",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.setAllSpringProfiles",
+          "when": "view == javaLauncherView && viewItem == javaEntries",
+          "group": "inline"
+        }
+        ,
+        {
+          "command": "java-launcher.createAggregatedLaunch",
+          "when": "view == javaLauncherView && viewItem == aggregatedConfigs",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  },
+  "dependencies": {
+    "glob": "^10.3.10",
+    "fast-glob": "^3.3.2"
+  }
+}
