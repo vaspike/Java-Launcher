@@ -32,7 +32,7 @@
 ## 快速上手
 
 1.  在 VS Code 插件市场中安装 **Java Launcher**。
-2.  打开一个 Java 项目（支持 Maven 和 Gradle）。
+2.  打开一个 Java 项目（完整支持 Maven，Gradle 为试验性支持）。
 3.  点击活动栏中新增的 Java Launcher 图标。
 4.  插件将自动扫描您的项目，并显示所有可运行的入口点。
 5.  点击任意入口点旁边的“运行”或“调试”图标，即可启动！
@@ -73,6 +73,10 @@
 - `Java Launcher: 设置Spring Profile`
 - `Java Launcher: 批量设置Spring Profile`
 - `Java Launcher: 刷新视图`
+
+## 已知问题
+
+- **Gradle 项目支持**: 目前插件对 Gradle 项目的支持处于**试验阶段**。它仅能识别遵循标准目录结构（如 `src/main/java`）的简单项目，且尚未实现依赖解析。我们正积极开发中，并计划在未来的版本中提供完整的官方支持。在此之前，我们推荐在 Maven 项目中使用以获得最佳体验。
 
 ## 贡献代码
 

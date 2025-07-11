@@ -32,7 +32,7 @@ In a typical VS Code setup, running and debugging Java applications, especially 
 ## Getting Started
 
 1.  Install the **Java Launcher** extension from the VS Code Marketplace.
-2.  Open a Java project (Maven or Gradle).
+2.  Open a Java project (Maven is fully supported, Gradle is experimental).
 3.  Click the new Java Launcher icon in the Activity Bar.
 4.  The extension will automatically scan your project and display all discovered entry points.
 5.  Click the "Run" or "Debug" icon next to any entry point to launch it!
@@ -73,6 +73,10 @@ Open the command palette (⇧⌘P or Ctrl+Shift+P) and type `Java Launcher:` to 
 - `Java Launcher: Set Spring Active Profile`
 - `Java Launcher: Set All Spring Boot Profiles`
 - `Java Launcher: Refresh View`
+
+## Known Issues
+
+- **Gradle Support**: Support for Gradle projects is currently **experimental**. It can only recognize simple projects that follow standard directory structures (e.g., `src/main/java`) and does not yet resolve dependencies. We are actively working on it and plan to provide full, official support in a future release. In the meantime, we recommend using Maven projects for the best experience.
 
 ## Contributing
 
