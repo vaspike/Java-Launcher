@@ -10,6 +10,17 @@
 
 ---
 
+## 截图预览
+
+  ![902X356/Snipaste_2025-07-11_09-40-22.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/8Pxw/902X356/Snipaste_2025-07-11_09-40-22.png)
+  ![1252X554/Snipaste_2025-07-11_13-43-22.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/2vPm/1252X554/Snipaste_2025-07-11_13-43-22.png)
+  ![1256X330/Snipaste_2025-07-11_09-38-56.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/Qcpq/1256X330/Snipaste_2025-07-11_09-38-56.png)
+  ![2702X676/Snipaste_2025-07-11_09-33-49.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/iHVJ/2702X676/Snipaste_2025-07-11_09-33-49.png)
+  ![1520X956/Snipaste_2025-07-11_09-38-01.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/HsJc/1520X956/Snipaste_2025-07-11_09-38-01.png)
+
+
+### 查看更多预览图片, 请移步: [Java Launcher](https://rivermao.com/program/java-launcher/)
+
 ## 为什么选择 Java Launcher?
 
 在典型的 VS Code 环境中，运行和调试 Java 应用，尤其是在一个多模块的微服务项目中，通常需要繁琐地手动配置 `launch.json` 文件。这个过程既耗时又容易出错。
