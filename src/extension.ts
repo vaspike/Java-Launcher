@@ -1427,73 +1427,73 @@ async function showAllJavaLauncherCommands(): Promise<void> {
     const commands: CommandItem[] = [
         {
             label: `$(gear) ${i18n.localize('command.generateConfigs')}`,
-            description: i18n.localize('command.generateConfigsDescription'),
+            description: "",
             detail: i18n.localize('command.generateConfigsDetail'),
             command: 'java-launcher.generateLaunchConfigs'
         },
         {
             label: `$(window) ${i18n.localize('command.manageRunningProcesses')}`,
-            description: i18n.localize('command.manageRunningProcessesDescription'),
+            description: "",
             detail: i18n.localize('command.manageRunningProcessesDetail'),
             command: 'java-launcher.manageRunningProcesses'
         },
         {
             label: `$(sync) ${i18n.localize('command.scanEntries')}`, 
-            description: i18n.localize('command.scanEntriesDescription'),
+            description: "",
             detail: i18n.localize('command.scanEntriesDetail'),
             command: 'java-launcher.scanJavaEntries'
         },
         {
             label: `$(plus) ${i18n.localize('command.createAggregated')}`,
-            description: i18n.localize('command.createAggregatedDescription'),
+            description: "",
             detail: i18n.localize('command.createAggregatedDetail'),
             command: 'java-launcher.createAggregatedLaunch'
         },
         {
             label: `$(settings-gear) ${i18n.localize('command.manageAggregated')}`,
-            description: i18n.localize('command.manageAggregatedDescription'),
+            description: "",
             detail: i18n.localize('command.manageAggregatedDetail'),
             command: 'java-launcher.manageAggregatedLaunch'
         },
         {
             label: `$(play) ${i18n.localize('command.executeAggregated')}`,
-            description: i18n.localize('command.executeAggregatedDescription'),
+            description: "",
             detail: i18n.localize('command.executeAggregatedDetail'),
             command: 'java-launcher.executeAggregatedLaunch'
         },
         {
             label: `$(debug) ${i18n.localize('command.debugAggregated')}`,
-            description: i18n.localize('command.debugAggregatedDescription'),
+            description: "",
             detail: i18n.localize('command.debugAggregatedDetail'),
             command: 'java-launcher.debugAggregatedLaunch'
         },
         {
             label: `$(refresh) ${i18n.localize('command.refreshTreeView')}`,
-            description: i18n.localize('command.refreshTreeViewDescription'),
+            description: "",
             detail: i18n.localize('command.refreshTreeViewDetail'),
             command: 'java-launcher.refreshTreeView'
         },
         {
             label: `$(search) ${i18n.localize('command.searchAndRun')}`,
-            description: i18n.localize('command.searchAndRunDescription'),
+            description: "",
             detail: i18n.localize('command.searchAndRunDetail'),
             command: 'java-launcher.searchAndRun'
         },
         {
             label: `$(settings) ${i18n.localize('command.setSpringProfile')}`,
-            description: i18n.localize('command.setSpringProfileDescription'),
+            description: "",
             detail: i18n.localize('command.setSpringProfileDetail'),
             command: 'java-launcher.setSpringProfile'
         },
         {
             label: `$(settings-sync) ${i18n.localize('command.setAllSpringProfiles')}`,
-            description: i18n.localize('command.setAllSpringProfilesDescription'),
+            description: "",
             detail: i18n.localize('command.setAllSpringProfilesDetail'),
             command: 'java-launcher.setAllSpringProfiles'
         },
         {
             label: `$(remote-explorer) ${i18n.localize('command.setAllJmxRemoteStatus')}`,
-            description: i18n.localize('command.setAllJmxRemoteStatusDescription'),
+            description: "",
             detail: i18n.localize('command.setAllJmxRemoteStatusDetail'),
             command: 'java-launcher.setAllJmxRemoteStatus'
         }
