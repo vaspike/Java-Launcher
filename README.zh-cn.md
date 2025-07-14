@@ -1,6 +1,9 @@
 # Java Launcher for VS Code
 
 [![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/River.java-launcher?style=flat-square&label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
+[![Open VSX](https://img.shields.io/open-vsx/v/River/java-launcher?style=flat-square&label=Open%20VSX)](https://open-vsx.org/extension/River/java-launcher)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/River.java-launcher?style=flat-square&label=VS%20Code%20下载量)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
+[![Open VSX Downloads](https://img.shields.io/open-vsx/dt/River/java-launcher?style=flat-square&label=Open%20VSX%20下载量)](https://open-vsx.org/extension/River/java-launcher)
 
 一款功能强大、操作直观的 VS Code 插件，用于发现、运行、管理和调试您的 Java 应用。其设计灵感来源于 **JetBrains IntelliJ IDEA** 中流畅的运行和调试体验。
 

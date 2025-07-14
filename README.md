@@ -1,6 +1,9 @@
 # Java Launcher for VS Code
 
 [![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/River.java-launcher?style=flat-square&label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
+[![Open VSX](https://img.shields.io/open-vsx/v/River/java-launcher?style=flat-square&label=Open%20VSX)](https://open-vsx.org/extension/River/java-launcher)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/River.java-launcher?style=flat-square&label=VS%20Code%20Downloads)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
+[![Open VSX Downloads](https://img.shields.io/open-vsx/dt/River/java-launcher?style=flat-square&label=Open%20VSX%20Downloads)](https://open-vsx.org/extension/River/java-launcher)
 
 A powerful yet intuitive extension to discover, run, manage, and debug your Java applications, inspired by the seamless run/debug experience in **JetBrains IntelliJ IDEA**.
 
