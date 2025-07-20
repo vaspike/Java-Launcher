@@ -183,6 +183,12 @@
         "command": "java-launcher.manageRunningProcesses",
         "title": "Manage Running Java Processes",
         "icon": "$(window)"
+      },
+      {
+        "command": "java-launcher.jumpToSource",
+        "title": "Jump to Source Code",
+        "icon": "$(go-to-file)",
+        "category": "Java Launcher"
       }
     ],
     "views": {
@@ -250,6 +256,10 @@
         {
           "command": "java-launcher.manageRunningProcesses",
           "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "java-launcher.jumpToSource",
+          "when": "workspaceFolderCount > 0"
         }
       ],
       "view/title": [
@@ -291,12 +301,22 @@
           "group": "inline"
         },
         {
+          "command": "java-launcher.jumpToSource",
+          "when": "view == javaLauncherView && viewItem == springBootApp",
+          "group": "inline"
+        },
+        {
           "command": "java-launcher.runJavaEntry",
           "when": "view == javaLauncherView && viewItem == javaApp",
           "group": "inline"
         },
         {
           "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == javaApp",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.jumpToSource",
           "when": "view == javaLauncherView && viewItem == javaApp",
           "group": "inline"
         },
@@ -307,6 +327,11 @@
         },
         {
           "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == testClass",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.jumpToSource",
           "when": "view == javaLauncherView && viewItem == testClass",
           "group": "inline"
         },
@@ -317,6 +342,11 @@
         },
         {
           "command": "java-launcher.addToAggregatedConfig",
+          "when": "view == javaLauncherView && viewItem == testMethod",
+          "group": "inline"
+        },
+        {
+          "command": "java-launcher.jumpToSource",
           "when": "view == javaLauncherView && viewItem == testMethod",
           "group": "inline"
         },

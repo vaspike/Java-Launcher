@@ -379,6 +379,10 @@ export class I18nService {
             'en': 'Enable or disable JMX remote management for all Java launch configurations.',
             'zh-cn': '为所有 Java 启动配置启用或禁用 JMX 远程管理'
         },
+        'command.goToSourceDetail': {
+            'en': 'Jump to the source code location of the selected Java entry point.',
+            'zh-cn': '跳转到选中的Java入口点的源代码位置'
+        },
 
         // 插件激活
         'extension.activated': {
@@ -646,6 +650,10 @@ export class I18nService {
         'entry.invalid': {
             'en': 'Invalid Java entry point, please select again.',
             'zh-cn': 'Java入口点无效，请重新选择'
+        },
+        'entry.sourceNotFound': {
+            'en': 'Source file not found for this entry point',
+            'zh-cn': '未找到此入口点的源文件'
         },
 
         // 扫描
@@ -1208,6 +1216,20 @@ export class I18nService {
         'command.addToAggregatedConfig': {
             'en': 'Add to Aggregated Config',
             'zh-cn': '添加到聚合配置'
+        },
+        'command.goToSource': {
+            'en': 'Jump to Source Code',
+            'zh-cn': '跳转到源码'
+        },
+
+        // 源码跳转
+        'source.fileNotFound': {
+            'en': 'Source file not found: {0}',
+            'zh-cn': '源文件未找到: {0}'
+        },
+        'source.openFailed': {
+            'en': 'Failed to open source file: {0}',
+            'zh-cn': '打开源文件失败: {0}'
         },
 
         // 插件

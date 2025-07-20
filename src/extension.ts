@@ -302,6 +302,35 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
+    // 注册命令：跳转到源码
+    const jumpToSourceCommand = vscode.commands.registerCommand(
+        'java-launcher.jumpToSource',
+        async (javaEntryOrTreeItem: JavaEntry | JavaLauncherTreeItem) => {
+            try {
+                let javaEntry: JavaEntry;
+                
+                // 判断传入的是TreeItem还是直接的JavaEntry对象
+                if ('itemType' in javaEntryOrTreeItem) {
+                    // 这是TreeItem对象，从data属性获取JavaEntry
+                    javaEntry = (javaEntryOrTreeItem as JavaLauncherTreeItem).data;
+                } else {
+                    // 这是直接的JavaEntry对象
+                    javaEntry = javaEntryOrTreeItem as JavaEntry;
+                }
+                
+                if (!javaEntry || !javaEntry.filePath) {
+                    vscode.window.showErrorMessage(i18n.localize('entry.sourceNotFound'));
+                    return;
+                }
+                
+                await goToJavaEntrySource(javaEntry);
+            } catch (error) {
+                vscode.window.showErrorMessage(`${i18n.localize('command.goToSource')} ${i18n.localize('common.failed')}: ${error}`);
+                console.error('跳转到源码失败:', error);
+            }
+        }
+    );
+
     // 将命令添加到订阅列表
     context.subscriptions.push(generateLaunchConfigsCommand);
     context.subscriptions.push(scanJavaEntriesCommand);
@@ -313,6 +342,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(runAggregatedConfigCommand);
     context.subscriptions.push(refreshTreeViewCommand);
     context.subscriptions.push(addToAggregatedConfigCommand);
+    context.subscriptions.push(jumpToSourceCommand); // 添加跳转到源码命令到订阅
     context.subscriptions.push(showAllCommandsCommand);
     context.subscriptions.push(setSpringProfileCommand);
     context.subscriptions.push(setAllSpringProfilesCommand);
@@ -1496,6 +1526,12 @@ async function showAllJavaLauncherCommands(): Promise<void> {
             description: "",
             detail: i18n.localize('command.setAllJmxRemoteStatusDetail'),
             command: 'java-launcher.setAllJmxRemoteStatus'
+        },
+        {
+            label: `$(go-to-file) ${i18n.localize('command.goToSource')}`,
+            description: "",
+            detail: i18n.localize('command.goToSourceDetail'),
+            command: 'java-launcher.jumpToSource'
         }
     ];
 
@@ -1928,6 +1964,56 @@ function formatRunningTime(startTime: Date): string {
         return i18n.localize('time.minutesSeconds', minutes, seconds);
     } else {
         return i18n.localize('time.seconds', seconds);
+    }
+}
+
+/**
+ * 跳转到Java入口点的源码位置
+ */
+async function goToJavaEntrySource(javaEntry: JavaEntry): Promise<void> {
+    const i18n = I18nService.getInstance();
+    
+    try {
+        // 检查文件路径是否存在
+        const fileSystemManager = new FileSystemManager();
+        const exists = await fileSystemManager.exists(javaEntry.filePath);
+        
+        if (!exists) {
+            vscode.window.showErrorMessage(i18n.localize('source.fileNotFound', javaEntry.filePath));
+            return;
+        }
+        
+        // 打开文件
+        const document = await vscode.workspace.openTextDocument(javaEntry.filePath);
+        const editor = await vscode.window.showTextDocument(document);
+        
+        // 跳转到指定行
+        const lineNumber = Math.max(0, javaEntry.lineNumber - 1); // VS Code使用0基索引
+        const position = new vscode.Position(lineNumber, 0);
+        const range = new vscode.Range(position, position);
+        
+        // 设置光标位置并滚动到该位置
+        editor.selection = new vscode.Selection(position, position);
+        editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
+        
+        // 高亮显示该行
+        const decoration = vscode.window.createTextEditorDecorationType({
+            backgroundColor: new vscode.ThemeColor('editor.findMatchHighlightBackground'),
+            isWholeLine: true
+        });
+        
+        editor.setDecorations(decoration, [range]);
+        
+        // 3秒后移除高亮
+        setTimeout(() => {
+            decoration.dispose();
+        }, 3000);
+        
+        console.log(`跳转到源码: ${javaEntry.filePath}:${javaEntry.lineNumber}`);
+        
+    } catch (error) {
+        console.error('跳转到源码失败:', error);
+        vscode.window.showErrorMessage(i18n.localize('source.openFailed', error));
     }
 }
 

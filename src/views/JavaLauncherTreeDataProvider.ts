@@ -51,22 +51,42 @@ export class JavaLauncherTreeItem extends vscode.TreeItem {
             case TreeItemType.SPRING_BOOT_APP:
                 this.iconPath = new vscode.ThemeIcon('symbol-method');
                 this.tooltip = i18n.localize('tree.springBootApp.tooltip', this.label);
-                // 移除command，点击名称不触发操作
+                // 设置点击命令为跳转到源码
+                this.command = {
+                    command: 'java-launcher.jumpToSource',
+                    title: i18n.localize('command.goToSource'),
+                    arguments: [this]
+                };
                 break;
             case TreeItemType.JAVA_APP:
                 this.iconPath = new vscode.ThemeIcon('symbol-function');
                 this.tooltip = i18n.localize('tree.javaApp.tooltip', this.label);
-                // 移除command，点击名称不触发操作
+                // 设置点击命令为跳转到源码
+                this.command = {
+                    command: 'java-launcher.jumpToSource',
+                    title: i18n.localize('command.goToSource'),
+                    arguments: [this]
+                };
                 break;
             case TreeItemType.TEST_CLASS:
                 this.iconPath = new vscode.ThemeIcon('beaker');
                 this.tooltip = i18n.localize('tree.testClass.tooltip', this.label);
-                // 移除command，点击名称不触发操作
+                // 设置点击命令为跳转到源码
+                this.command = {
+                    command: 'java-launcher.jumpToSource',
+                    title: i18n.localize('command.goToSource'),
+                    arguments: [this]
+                };
                 break;
             case TreeItemType.TEST_METHOD:
                 this.iconPath = new vscode.ThemeIcon('symbol-misc');
                 this.tooltip = i18n.localize('tree.testMethod.tooltip', this.label);
-                // 移除command，点击名称不触发操作
+                // 设置点击命令为跳转到源码
+                this.command = {
+                    command: 'java-launcher.jumpToSource',
+                    title: i18n.localize('command.goToSource'),
+                    arguments: [this]
+                };
                 break;
             case TreeItemType.AGGREGATED_CONFIG:
                 this.iconPath = new vscode.ThemeIcon('package');
