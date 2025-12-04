@@ -15,11 +15,13 @@ Say goodbye to manually editing `launch.json` files. Java Launcher automatically
 
 ## Glanace
 
-  ![902X356/Snipaste_2025-07-11_09-40-22.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/8Pxw/902X356/Snipaste_2025-07-11_09-40-22.png)
-  ![1252X554/Snipaste_2025-07-11_13-43-22.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/2vPm/1252X554/Snipaste_2025-07-11_13-43-22.png)
-  ![1256X330/Snipaste_2025-07-11_09-38-56.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/Qcpq/1256X330/Snipaste_2025-07-11_09-38-56.png)
-  ![2702X676/Snipaste_2025-07-11_09-33-49.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/iHVJ/2702X676/Snipaste_2025-07-11_09-33-49.png)
-  ![1520X956/Snipaste_2025-07-11_09-38-01.png](https://tc.z.wiki/autoupload/f/orCzaWOvKzgYH1bdiGU7RymIkHMchKbLor7dh3rvZ9Gyl5f0KlZfm6UsKj-HyTuv/20250711/HsJc/1520X956/Snipaste_2025-07-11_09-38-01.png)
+<img width="902" height="356" alt="image" src="https://github.com/user-attachments/assets/3e46dc02-545c-42ab-ae56-bcd08b305c64" />
+<img width="1252" height="554" alt="image" src="https://github.com/user-attachments/assets/82486078-c953-4e53-8e5e-b41401d0a8cb" />
+<img width="1520" height="956" alt="image" src="https://github.com/user-attachments/assets/f32593f3-6351-44a6-9f12-9485ebf2422a" />
+<img width="2702" height="676" alt="image" src="https://github.com/user-attachments/assets/4d1a3e5d-3e78-4add-80dd-445cd141617f" />
+
+
+
 
 
 ### For more displays, please check [Java Launcher](https://rivermao.com/program/java-launcher/)
