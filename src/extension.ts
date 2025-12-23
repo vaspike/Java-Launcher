@@ -1721,7 +1721,7 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
     try {
         const recentHistory = await recentLaunchManager.getRecentLaunches(5);
         const recentEntries = recentHistory
-            .map(history => {
+            .map((history): (vscode.QuickPickItem & { type: string; config?: AggregatedLaunchConfig; entry?: JavaEntry }) | null => {
                 if (history.type === 'aggregated') {
                     const config = allConfigs.find(cfg => cfg.name === history.aggregatedName);
                     if (!config) {
@@ -1733,7 +1733,7 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
                         detail: `${i18n.localize('search.recent')}`,
                         config,
                         type: 'recent-config'
-                    } as vscode.QuickPickItem & { type: string; config: AggregatedLaunchConfig };
+                    };
                 } else {
                     const entry = allEntries.find(e =>
                         e.className === history.className &&
@@ -1748,10 +1748,10 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
                         detail: `${i18n.localize('search.recent')} · ${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('common.unknown')}`,
                         entry,
                         type: 'recent-entry'
-                    } as vscode.QuickPickItem & { type: string; entry: JavaEntry };
+                    };
                 }
             })
-            .filter((item): item is vscode.QuickPickItem & { type: string } => !!item);
+            .filter((item): item is vscode.QuickPickItem & { type: string; config?: AggregatedLaunchConfig; entry?: JavaEntry } => item !== null);
 
         recentItems = recentEntries;
     } catch (error) {
