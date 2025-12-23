@@ -1692,20 +1692,95 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
     // 获取聚合启动管理器实例
     const aggregatedLaunchManager = new AggregatedLaunchManager();
     await aggregatedLaunchManager.loadConfigs();
+    // 最近启动管理器
+    const recentLaunchManager = new RecentLaunchManager();
     // 创建QuickPick
     const quickPick = vscode.window.createQuickPick();
-    quickPick.placeholder = i18n.localize('config.inputSearchQuery');
+    quickPick.placeholder = i18n.localize('search.loading');
     quickPick.title = i18n.localize('config.searchAndRunJavaEntryOrConfig');
+    quickPick.busy = true;
+    quickPick.enabled = false;
+    quickPick.items = [{
+        label: `$(sync~spin) ${i18n.localize('search.loading')}`
+    }];
+    quickPick.show(); // 先展示UI，提示正在加载
     
     // 设置初始项
-    const allEntries = treeDataProvider.getJavaEntries();
-    const allConfigs = treeDataProvider.getAggregatedConfigs();
+    let allEntries = treeDataProvider.getJavaEntries();
+    let allConfigs = treeDataProvider.getAggregatedConfigs();
+    let recentItems: vscode.QuickPickItem[] = [];
+
+    // 首次调用时若尚未加载数据，自动补偿加载，避免依赖手动刷新
+    if (allEntries.length === 0 && allConfigs.length === 0) {
+        await treeDataProvider.reloadData();
+        allEntries = treeDataProvider.getJavaEntries();
+        allConfigs = treeDataProvider.getAggregatedConfigs();
+    }
+
+    // 构建最近使用的入口点与聚合配置（最多5条）
+    try {
+        const recentHistory = await recentLaunchManager.getRecentLaunches(5);
+        const recentEntries = recentHistory
+            .map(history => {
+                if (history.type === 'aggregated') {
+                    const config = allConfigs.find(cfg => cfg.name === history.aggregatedName);
+                    if (!config) {
+                        return null;
+                    }
+                    return {
+                        label: `$(history) ${config.name}`,
+                        description: i18n.localize('config.aggregatedLaunchConfig'),
+                        detail: `${i18n.localize('search.recent')}`,
+                        config,
+                        type: 'recent-config'
+                    } as vscode.QuickPickItem & { type: string; config: AggregatedLaunchConfig };
+                } else {
+                    const entry = allEntries.find(e =>
+                        e.className === history.className &&
+                        e.methodName === history.methodName
+                    );
+                    if (!entry) {
+                        return null;
+                    }
+                    return {
+                        label: `$(history) ${entry.displayName}`,
+                        description: entry.className,
+                        detail: `${i18n.localize('search.recent')} · ${i18n.localize('config.project')}: ${entry.projectName || i18n.localize('common.unknown')}`,
+                        entry,
+                        type: 'recent-entry'
+                    } as vscode.QuickPickItem & { type: string; entry: JavaEntry };
+                }
+            })
+            .filter((item): item is vscode.QuickPickItem & { type: string } => !!item);
+
+        recentItems = recentEntries;
+    } catch (error) {
+        console.warn('加载最近启动记录失败:', error);
+    }
+
+    if (recentItems.length === 0) {
+        recentItems = [{
+            label: `$(clock) ${i18n.localize('search.recentEmpty')}`,
+            alwaysShow: true
+        }];
+    }
+
+    // 加载完成后恢复输入能力与占位符
+    quickPick.placeholder = i18n.localize('config.inputSearchQuery');
+    quickPick.busy = false;
+    quickPick.enabled = true;
+    quickPick.items = recentItems;
     
     // 当输入变化时更新搜索结果
     quickPick.onDidChangeValue(() => {
+        // 如果仍在加载或禁用状态，忽略输入
+        if (quickPick.busy || !quickPick.enabled) {
+            return;
+        }
+
         const searchQuery = quickPick.value.toLowerCase();
         if (!searchQuery) {
-            quickPick.items = [];
+            quickPick.items = recentItems;
             return;
         }
         
@@ -1777,6 +1852,9 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
     
     // 当选择项时执行操作
     quickPick.onDidAccept(async () => {
+        if (quickPick.busy || !quickPick.enabled) {
+            return;
+        }
         const selectedItem = quickPick.selectedItems[0] as any;
         if (!selectedItem) {
             return;
@@ -1793,11 +1871,24 @@ async function searchJavaEntries(treeDataProvider: JavaLauncherTreeDataProvider)
                 `${i18n.localize('config.runSuccess', entry.displayName)}` : 
                 `${i18n.localize('config.runSuccess', entry.displayName)}`;
             vscode.window.showInformationMessage(runMessage);
+        } else if (selectedItem.type === 'recent-entry') {
+            const entry = selectedItem.entry as JavaEntry;
+            await runJavaEntryFromTree(entry, new LaunchConfigGenerator(), new ProjectScanner());
+            await treeDataProvider.recordLaunch(entry);
+            const runMessage = i18n.getLocale() === 'zh-cn' ? 
+                `${i18n.localize('config.runSuccess', entry.displayName)}` : 
+                `${i18n.localize('config.runSuccess', entry.displayName)}`;
+            vscode.window.showInformationMessage(runMessage);
         } else if (selectedItem.type === 'config') {
             // 运行聚合配置
             const config = selectedItem.config as AggregatedLaunchConfig;
             // 使用已经存在的聚合启动管理器实例，确保配置已加载
             await aggregatedLaunchManager.executeAggregatedLaunch(config.name);
+            await recentLaunchManager.recordAggregatedLaunch(config.name);
+        } else if (selectedItem.type === 'recent-config') {
+            const config = selectedItem.config as AggregatedLaunchConfig;
+            await aggregatedLaunchManager.executeAggregatedLaunch(config.name);
+            await recentLaunchManager.recordAggregatedLaunch(config.name);
         }
     });
     

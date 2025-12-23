@@ -9,8 +9,10 @@ import { I18nService } from './I18nService';
  * 最近启动记录项
  */
 export interface LaunchHistoryItem {
-    className: string;
+    type?: 'entry' | 'aggregated'; // 兼容历史数据，默认 entry
+    className: string; // entry 类型使用
     methodName?: string;
+    aggregatedName?: string; // aggregated 类型使用
     lastLaunchTime: number;
     launchCount: number;
 }
@@ -52,7 +54,15 @@ export class RecentLaunchManager {
                 const content = await this.fileSystemManager.readFile(this.historyFilePath);
                 const jsonData = JSON.parse(content);
                 
-                this.launchHistory = jsonData.history || [];
+                this.launchHistory = (jsonData.history || []).map((item: LaunchHistoryItem) => ({
+                    // 兼容旧格式：默认 entry
+                    type: item.type || 'entry',
+                    className: item.className,
+                    methodName: item.methodName,
+                    aggregatedName: item.aggregatedName,
+                    lastLaunchTime: item.lastLaunchTime,
+                    launchCount: item.launchCount
+                }));
             }
             
             console.log(this.i18n.localize('recent.historyLoaded'));
@@ -107,9 +117,11 @@ export class RecentLaunchManager {
             // 更新现有记录
             this.launchHistory[index].lastLaunchTime = Date.now();
             this.launchHistory[index].launchCount++;
+            this.launchHistory[index].type = 'entry';
         } else {
             // 添加新记录
             this.launchHistory.push({
+                type: 'entry',
                 className: javaEntry.className,
                 methodName: javaEntry.methodName,
                 lastLaunchTime: Date.now(),
@@ -118,6 +130,32 @@ export class RecentLaunchManager {
         }
 
         // 保存历史记录
+        await this.saveHistory();
+    }
+
+    /**
+     * 记录聚合配置启动
+     */
+    public async recordAggregatedLaunch(configName: string): Promise<void> {
+        await this.loadHistory();
+
+        const index = this.launchHistory.findIndex(
+            item => item.type === 'aggregated' && item.aggregatedName === configName
+        );
+
+        if (index !== -1) {
+            this.launchHistory[index].lastLaunchTime = Date.now();
+            this.launchHistory[index].launchCount++;
+        } else {
+            this.launchHistory.push({
+                type: 'aggregated',
+                className: '', // 保留字段，兼容结构
+                aggregatedName: configName,
+                lastLaunchTime: Date.now(),
+                launchCount: 1
+            });
+        }
+
         await this.saveHistory();
     }
 
@@ -176,12 +214,14 @@ export class RecentLaunchManager {
             // 按最近启动时间给configurations排序
             launchJson.configurations.sort((a: any, b: any) => {
                 const aIndex = this.launchHistory.findIndex(
-                    item => item.className === a.mainClass && 
+                    item => item.type !== 'aggregated' &&
+                            item.className === a.mainClass && 
                             (a.testClass ? item.methodName === a.testClass : true)
                 );
                 
                 const bIndex = this.launchHistory.findIndex(
-                    item => item.className === b.mainClass && 
+                    item => item.type !== 'aggregated' &&
+                            item.className === b.mainClass && 
                             (b.testClass ? item.methodName === b.testClass : true)
                 );
                 

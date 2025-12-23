@@ -209,9 +209,21 @@ export class I18nService {
             'en': 'Search for Java entry points or aggregated configurations',
             'zh-cn': '输入关键字搜索Java入口点或聚合配置'
         },
+        'search.loading': {
+            'en': 'First use after startup: loading entry points, please wait...',
+            'zh-cn': '首次启动后使用：正在加载入口点，请稍候...'
+        },
         'search.failed': {
             'en': 'Failed to search for Java entry points: {0}',
             'zh-cn': '搜索Java入口点失败: {0}'
+        },
+        'search.recent': {
+            'en': 'Recent',
+            'zh-cn': '最近使用'
+        },
+        'search.recentEmpty': {
+            'en': 'No recent entries yet.',
+            'zh-cn': '暂无最近记录'
         },
         'search.noResults': {
             'en': 'No matching Java entry points were found.',
