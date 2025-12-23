@@ -1,103 +1,98 @@
 # Java Launcher for VS Code
 
-[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/River.java-launcher?style=flat-square&label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
-[![Open VSX](https://img.shields.io/open-vsx/v/River/java-launcher?style=flat-square&label=Open%20VSX)](https://open-vsx.org/extension/River/java-launcher)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/River.java-launcher?style=flat-square&label=VS%20Code%20Downloads)](https://marketplace.visualstudio.com/items?itemName=River.java-launcher)
 [![Open VSX Downloads](https://img.shields.io/open-vsx/dt/River/java-launcher?style=flat-square&label=Open%20VSX%20Downloads)](https://open-vsx.org/extension/River/java-launcher)
 
-A powerful yet intuitive extension to discover, run, manage, and debug your Java applications, inspired by the seamless run/debug experience in **JetBrains IntelliJ IDEA**.
+A zero-configuration tool for discovering, running, debugging, and managing Java applications in VS Code.
 
-Say goodbye to manually editing `launch.json` files. Java Launcher automatically detects all your runnable entry points—`main` methods, Spring Boot applications, and tests—and displays them in a dedicated tree view in the activity bar. Run an entire microservices stack with a single click.
+Inspired by IntelliJ IDEA's run configuration experience, Java Launcher automatically detects entry points—Spring Boot apps, `main` methods, and tests—so you can run or debug them instantly without manually editing `launch.json`. It also supports "aggregated" launches to start multiple services in sequence with a single click.
 
 [English](./README.md) | [中文](./README.zh-cn.md)
 
 ---
 
-## Glanace
+## Glance
 
-<img width="902" height="356" alt="image" src="https://github.com/user-attachments/assets/3e46dc02-545c-42ab-ae56-bcd08b305c64" />
-<img width="1252" height="554" alt="image" src="https://github.com/user-attachments/assets/82486078-c953-4e53-8e5e-b41401d0a8cb" />
-<img width="1520" height="956" alt="image" src="https://github.com/user-attachments/assets/f32593f3-6351-44a6-9f12-9485ebf2422a" />
-<img width="2702" height="676" alt="image" src="https://github.com/user-attachments/assets/4d1a3e5d-3e78-4add-80dd-445cd141617f" />
-
-
-
-
-
-### For more displays, please check [Java Launcher](https://rivermao.com/program/java-launcher/)
-
-## Why Java Launcher?
-
-In a typical VS Code setup, running and debugging Java applications, especially in a multi-module microservices project, often requires cumbersome manual configuration of `launch.json`. This process can be slow and error-prone.
-
-**Java Launcher** is built to solve this problem. Inspired by the fluid workflow of IntelliJ IDEA, it brings a "zero-configuration" experience to VS Code, allowing you to focus on coding, not configuration.
+![image](https://github.com/user-attachments/assets/3e46dc02-545c-42ab-ae56-bcd08b305c64)
+![image](https://github.com/user-attachments/assets/82486078-c953-4e53-8e5e-b41401d0a8cb)
+![image](https://github.com/user-attachments/assets/f32593f3-6351-44a6-9f12-9485ebf2422a)
+![image](https://github.com/user-attachments/assets/4d1a3e5d-3e78-4add-80dd-445cd141617f)
 
 ## Key Features
 
-- **💡 Zero-Configuration Run/Debug**: Automatically discovers all runnable entry points (`main` methods, `@SpringBootApplication`, JUnit & TestNG tests) across your workspace.
-- **🌳 Explorer Tree View**: Displays all discovered applications and test classes in a dedicated, easy-to-navigate tree view, grouped by project module.
-- **🚀 One-Click Actions**: Run, debug, or stop any application directly from the tree view.
-- **⚙️ Aggregated Launch Configurations**: Group multiple applications into a single configuration. Start your entire microservices stack sequentially with custom delays—all with one click.
-- **⚡ Quick Search & Run**: Use a powerful command palette (like `Ctrl+P`) to instantly find and run any entry point or aggregated configuration.
-- **🍃 Enhanced Spring Boot Support**:
-  - Automatically identifies Spring Boot applications.
-  - Easily set and switch Spring active profiles for a single app or all apps at once.
-- **🏃‍♂️ Process Management**: View, stop, or restart any Java process launched by the extension in a dedicated management interface.
-- **🌐 Internationalization**: Supports both **English** and **Chinese**.
+- **Zero-Config Discovery**: Automatically scans your workspace for runnable Java entry points.
+- **Unified Tree View**: Displays all discovered apps and tests in a dedicated sidebar, grouped by project module.
+- **Search & Run**: Quickly find and launch any entry point or aggregated config via a command palette-style interface. Supports lazy loading and recent history.
+- **Aggregated Launch**: Group multiple applications into a single configuration to start them sequentially with custom delays—ideal for microservices.
+- **Spring Boot Support**: First-class support for Spring Boot, including easy switching of active profiles (e.g., `dev`, `prod`).
+- **Process Management**: A dedicated interface to view, stop, or restart any Java process started by the extension.
+- **Internationalization**: Fully localized for English and Chinese users.
 
 ## Getting Started
 
-1.  Install the **Java Launcher** extension from the VS Code Marketplace.
-2.  Open a Java project (Maven is fully supported, Gradle is experimental).
-3.  Click the new Java Launcher icon in the Activity Bar.
-4.  The extension will automatically scan your project and display all discovered entry points.
-5.  Click the "Run" or "Debug" icon next to any entry point to launch it!
+1. Install **Java Launcher** from the VS Code Marketplace.
+2. Open a Java project (Maven supported; Gradle support is experimental).
+3. Click the **Rocket icon** in the Activity Bar to open the Java Launcher view.
+4. The extension automatically scans for entry points. Click the **Run (▶)** icon next to any item to start it.
 
-## Usage
+## Usage Guide
 
-### Running an Application
-Simply find your application in the Java Launcher view and click the ▶️ (Run) or 🐞 (Debug) icon next to it.
+### 1. Running Applications
+Navigate to the **Java Launcher** view in the sidebar. You will see a tree of discovered entry points:
+- **Spring Boot Apps**: Marked with a leaf icon.
+- **Main Classes**: Standard Java applications.
+- **Tests**: JUnit/TestNG classes and methods.
 
-### Aggregated Launch
-The aggregated launch feature is perfect for starting a complete microservices environment.
+Hover over an item and click the **Run** or **Debug** button.
 
-1.  **Create an Aggregated Configuration**:
-    - Right-click on an entry point in the tree view and select "Add to Aggregated Config".
-    - Or, run the `Java Launcher: Create Aggregated Launch Configuration` command.
-2.  **Manage Your Configuration**:
-    - Add multiple applications.
-    - Set custom startup delays (in milliseconds) for each application to manage dependencies (e.g., wait for a config server to start).
-    - Enable or disable applications within the configuration.
-3.  **Run It**:
-    - Find your aggregated configuration in the tree view and click the ▶️ (Run) icon.
+### 2. Search and Run
+Use the "Search and Run" command to quickly launch apps without leaving your keyboard.
+- **Command**: `Java Launcher: Search and Run Java Entry`
+- **Behavior**:
+  - Displays a search box that lazy-loads entry points on first use.
+  - Shows up to 5 most recently used entries or configs for instant reuse.
+  - Supports fuzzy matching by name.
 
-### Quick Search
-1.  Open the command palette (⇧⌘P or Ctrl+Shift+P).
-2.  Run the command `Java Launcher: Search and Run Java Entry Point`.
-3.  Start typing to filter applications and configurations, then press `Enter` to run.
+> **Tip**: Map this command to a keyboard shortcut for faster access (see [Recommended Shortcuts](#recommended-shortcuts)).
 
-## Available Commands
+### 3. Aggregated Launch (Microservices)
+Start multiple applications with one click.
+1. Right-click an entry point in the tree and select **Add to Aggregated Config**.
+2. Or use the command `Java Launcher: Create Aggregated Launch Configuration`.
+3. Give it a name and select the apps to include.
+4. (Optional) Configure **startup delays** (in ms) for each app to ensure dependent services start first.
+5. Run the aggregated config from the **Aggregated Configurations** section in the tree view.
 
-Open the command palette (⇧⌘P or Ctrl+Shift+P) and type `Java Launcher:` to see all available commands:
+### 4. Managing Processes
+View and control all running Java processes started by this extension.
+- **Command**: `Java Launcher: Manage Running Java Processes`
+- **Actions**: View status, stop individual processes, stop all, or restart all.
 
-- `Java Launcher: Generate Launch Configurations`
-- `Java Launcher: Manage Running Java Processes`
-- `Java Launcher: Scan Java Entry Points`
-- `Java Launcher: Create Aggregated Launch Configuration`
-- `Java Launcher: Manage Aggregated Launch Configurations`
-- `Java Launcher: Execute Aggregated Launch Configuration`
-- `Java Launcher: Set Spring Active Profile`
-- `Java Launcher: Set All Spring Boot Profiles`
-- `Java Launcher: Refresh View`
+## Recommended Shortcuts
 
-## Known Issues
+To improve your workflow, we recommend adding the following keybindings to your `keybindings.json`:
 
-- **Gradle Support**: Support for Gradle projects is currently **experimental**. It can only recognize simple projects that follow standard directory structures (e.g., `src/main/java`) and does not yet resolve dependencies. We are actively working on it and plan to provide full, official support in a future release. In the meantime, we recommend using Maven projects for the best experience.
+```json
+{
+  "key": "ctrl+alt+r",
+  "command": "java-launcher.searchAndRun",
+  "when": "editorTextFocus"
+},
+{
+  "key": "ctrl+alt+p",
+  "command": "java-launcher.manageRunningProcesses"
+}
+```
 
-## Contributing
+*(Adjust the keys `ctrl+alt+r` and `ctrl+alt+p` to fit your preference.)*
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/vaspike/Java-Launcher/issues).
+## Notes & Best Practices
+
+- **First Run**: The first time you use "Search and Run" after opening VS Code, there may be a brief delay while the extension scans your project. Subsequent searches will be instant.
+- **Gradle Support**: Currently experimental. It works best with standard project structures (`src/main/java`). For complex Gradle setups, manual configuration might still be required.
+- **Launch.json**: While this extension aims for zero-configuration, it generates standard VS Code launch configurations in `launch.json` under the hood. You can manually edit this file if you need advanced JVM arguments or environment variables.
+- **Refresh**: If you add new classes or methods, click the **Refresh** button in the Java Launcher view title bar to update the list.
 
 ## License
 
-This extension is licensed under the [MIT License](./LICENSE). 
+This project is licensed under the [MIT License](./LICENSE).
