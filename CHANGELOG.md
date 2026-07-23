@@ -4,6 +4,9 @@ All notable changes to the "java-launcher" extension will be documented in this 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [1.5.0] - 2026-07-23
 
-- Initial release
+### Fixed
+- Manage Running Java Processes: Stop now reliably terminates JVMs launched in integrated/external terminal (VS Code 1.129+). Tracks `processid` / `shellProcessId`, resolves Java child PIDs, and force-kills the process tree when needed.
+
+## [Unreleased]
